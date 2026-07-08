@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frontier-Lab Generative AI Engineer — 2026 Roadmap Checklist</title>
+  <meta name="description" content="An interactive, self-tracking checklist for the 12–24 month path to becoming a frontier-lab generative AI engineer: math, PyTorch, transformers, diffusion, systems, projects, papers, and career." />
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-soft: #12151d;
+      --card: #161a24;
+      --card-hover: #1b2130;
+      --border: #262d3d;
+      --text: #e7ecf5;
+      --text-dim: #99a3b5;
+      --text-faint: #828da6;
+      --accent: #7c8cff;
+      --accent-2: #b06cff;
+      --accent-grad: linear-gradient(120deg, #7c8cff 0%, #b06cff 55%, #ff7ac6 100%);
+      --ring-track: #262d3d;
+      --shadow: 0 10px 40px rgba(0,0,0,0.45);
+      --radius: 16px;
+
+      --cat-math: #f6b73c;
+      --cat-code: #5aa9ff;
+      --cat-llm: #a78bff;
+      --cat-diffusion: #ff7ac6;
+      --cat-systems: #35d0ba;
+      --cat-project: #4ade80;
+      --cat-paper: #8ea2ff;
+      --cat-career: #ff9d5c;
+      --cat-research: #ff6b6b;
+    }
+    :root[data-theme="light"] {
+      --bg: #f5f6fa;
+      --bg-soft: #eef0f6;
+      --card: #ffffff;
+      --card-hover: #f7f8fc;
+      --border: #e2e6ef;
+      --text: #1a1f2b;
+      --text-dim: #56607a;
+      --text-faint: #626d85;
+      --ring-track: #e2e6ef;
+      --shadow: 0 10px 30px rgba(30,40,80,0.10);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Visible keyboard focus for all interactive elements */
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+    .search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 28%, transparent); }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 48px 24px 40px;
+      background:
+        radial-gradient(900px 400px at 15% -10%, rgba(124,140,255,0.22), transparent 60%),
+        radial-gradient(800px 400px at 90% 0%, rgba(176,108,255,0.18), transparent 55%),
+        var(--bg-soft);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .hero-text { flex: 1 1 480px; min-width: 300px; }
+    .eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: clamp(28px, 5vw, 46px);
+      line-height: 1.08;
+      margin: 0 0 14px;
+      letter-spacing: -0.02em;
+      background: var(--accent-grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .subtitle { color: var(--text-dim); font-size: 17px; max-width: 620px; margin: 0 0 20px; }
+    .hero-meta { display: flex; gap: 22px; flex-wrap: wrap; color: var(--text-faint); font-size: 13px; }
+    .hero-meta b { color: var(--text); }
+
+    /* ---------- Progress ring ---------- */
+    .ring-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 26px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      min-width: 260px;
+    }
+    .ring { position: relative; width: 108px; height: 108px; flex-shrink: 0; }
+    .ring svg { transform: rotate(-90deg); }
+    .ring-label {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .ring-pct { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+    .ring-sub { font-size: 11px; color: var(--text-faint); }
+    .ring-stats .n { font-size: 26px; font-weight: 800; }
+    .ring-stats .t { color: var(--text-dim); font-size: 13px; }
+    .ring-stats .done-line { color: var(--text-faint); font-size: 12px; margin-top: 6px; }
+
+    /* ---------- Toolbar ---------- */
+    .toolbar {
+      position: sticky; top: 0; z-index: 20;
+      background: var(--bg-soft);
+      background: color-mix(in srgb, var(--bg) 86%, transparent);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+    }
+    .toolbar-inner {
+      max-width: 1080px; margin: 0 auto;
+      display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+    }
+    .search {
+      flex: 1 1 260px; min-width: 200px;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 8px 12px;
+    }
+    .search input {
+      border: none; background: transparent; color: var(--text);
+      outline: none; width: 100%; font-size: 14px;
+    }
+    .search svg { flex-shrink: 0; opacity: 0.5; }
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      cursor: pointer; user-select: none;
+      font-family: inherit; line-height: 1.2;
+      font-size: 12.5px; font-weight: 600;
+      padding: 6px 12px; border-radius: 999px;
+      border: 1px solid var(--border); background: var(--card);
+      color: var(--text-dim); transition: all 0.15s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .chip:hover { background: var(--card-hover); color: var(--text); }
+    .chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-faint); }
+    /* Active chip always uses dark text — category colors are bright, so dark reads in both themes */
+    .chip.active { color: #0b0d12; border-color: transparent; font-weight: 700; }
+    .btns { display: flex; gap: 8px; margin-left: auto; }
+    .btn {
+      cursor: pointer; font-size: 13px; font-weight: 600;
+      padding: 8px 12px; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--card);
+      color: var(--text-dim); transition: all 0.15s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn:hover { background: var(--card-hover); color: var(--text); }
+
+    /* ---------- Layout ---------- */
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 28px 24px 80px; }
+
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+    .section-head {
+      cursor: pointer; user-select: none;
+      display: flex; align-items: center; gap: 16px;
+      padding: 18px 22px;
+      list-style: none;
+    }
+    .section-head::-webkit-details-marker { display: none; }
+    .section-head:hover { background: var(--card-hover); }
+    .sec-icon {
+      width: 40px; height: 40px; border-radius: 11px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      background: rgba(124,140,255,0.16);
+      background: color-mix(in srgb, var(--accent) 16%, transparent);
+    }
+    .sec-title-wrap { flex: 1; min-width: 0; }
+    .sec-title { font-size: 18px; font-weight: 750; letter-spacing: -0.01em; margin: 0; }
+    .sec-sub { font-size: 13px; color: var(--text-faint); margin-top: 2px; }
+    .sec-progress { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .sec-count { font-size: 13px; color: var(--text-dim); font-variant-numeric: tabular-nums; min-width: 44px; text-align: right; }
+    .mini-bar { width: 90px; height: 7px; border-radius: 999px; background: var(--ring-track); overflow: hidden; }
+    .mini-bar > span { display: block; height: 100%; width: 0%; background: var(--accent-grad); transition: width 0.4s ease; }
+    .chevron { transition: transform 0.2s; opacity: 0.5; }
+    details[open] .chevron { transform: rotate(180deg); }
+
+    .section-body { padding: 4px 22px 16px; border-top: 1px solid var(--border); }
+    .group-label {
+      font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-faint); font-weight: 700;
+      margin: 18px 0 8px; padding-bottom: 6px;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    /* ---------- Items ---------- */
+    .item {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 9px 8px; border-radius: 10px;
+      transition: background 0.12s;
+    }
+    .item:hover { background: var(--card-hover); }
+    .item.done .item-text { color: var(--text-faint); text-decoration: line-through; text-decoration-color: var(--text-faint); }
+    .cbox {
+      appearance: none; -webkit-appearance: none;
+      width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px;
+      border: 2px solid var(--border); border-radius: 6px;
+      cursor: pointer; position: relative; transition: all 0.15s;
+      background: var(--bg-soft);
+    }
+    .cbox:hover { border-color: var(--accent); }
+    .cbox:checked { background: var(--accent-grad); border-color: transparent; }
+    .cbox:checked::after {
+      content: ""; position: absolute; left: 6px; top: 2px;
+      width: 5px; height: 10px; border: solid #fff;
+      border-width: 0 2.5px 2.5px 0; transform: rotate(45deg);
+    }
+    .item-body { flex: 1; min-width: 0; }
+    .item-text { font-size: 14.5px; }
+    .item-text .lead { font-weight: 650; }
+    .links { margin-top: 3px; display: flex; gap: 6px 14px; flex-wrap: wrap; }
+    .links a { font-size: 12.5px; display: inline-flex; align-items: center; gap: 4px; }
+    .links a::before { content: "↗"; font-size: 10px; opacity: 0.7; }
+    .tag {
+      display: inline-block; font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.03em; text-transform: uppercase;
+      padding: 2px 7px; border-radius: 6px; margin-left: 8px;
+      vertical-align: middle;
+      background: color-mix(in srgb, var(--tagc, var(--accent)) 18%, transparent);
+      color: var(--tagc, var(--accent));
+    }
+    .item.hidden, .section.hidden, .group.hidden { display: none; }
+
+    .empty {
+      text-align: center; color: var(--text-faint);
+      padding: 60px 20px; font-size: 15px;
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      max-width: 1080px; margin: 0 auto; padding: 30px 24px 60px;
+      color: var(--text-faint); font-size: 13px; border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--text-dim); }
+    .celebrate {
+      margin: 0 0 18px; padding: 16px 20px; border-radius: var(--radius);
+      background: var(--accent-grad); color: #0b0d12; font-weight: 700;
+      display: none; align-items: center; gap: 10px;
+    }
+    .celebrate.show { display: flex; }
+
+    @media (max-width: 640px) {
+      .hero { padding: 34px 18px 28px; }
+      .wrap { padding: 20px 14px 60px; }
+      .toolbar { padding: 10px 14px; }
+      .mini-bar { width: 54px; }
+      .sec-sub { display: none; }
+      .btns { margin-left: 0; width: 100%; }
+      .btn span.label { display: none; }
+    }
+    @media print {
+      .toolbar, .btns, .theme-toggle, .chevron { display: none !important; }
+      .section-body { display: block !important; }
+      .section, .ring-card { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <span class="eyebrow">2026 Roadmap · Build from scratch</span>
+        <h1>Frontier-Lab Generative&nbsp;AI Engineer</h1>
+        <p class="subtitle">A self-tracking checklist for the 12–24 month path: master the math &amp; PyTorch, build transformers and diffusion models from first principles, learn GPU systems, then reproduce frontier papers and ship a public portfolio. No PhD required for the engineering track.</p>
+        <div class="hero-meta">
+          <span><b>4</b> phases</span>
+          <span><b>14</b> portfolio projects</span>
+          <span><b>~30</b> core papers</span>
+          <span>Progress saved in your browser</span>
+        </div>
+      </div>
+      <div class="ring-card">
+        <div class="ring">
+          <svg width="108" height="108" viewBox="0 0 108 108">
+            <circle cx="54" cy="54" r="48" fill="none" stroke="var(--ring-track)" stroke-width="10"/>
+            <circle id="ringProgress" cx="54" cy="54" r="48" fill="none" stroke="url(#rg)" stroke-width="10"
+              stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="301.6"/>
+            <defs>
+              <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#7c8cff"/>
+                <stop offset="55%" stop-color="#b06cff"/>
+                <stop offset="100%" stop-color="#ff7ac6"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="ring-label">
+            <span class="ring-pct" id="ringPct">0%</span>
+            <span class="ring-sub">complete</span>
+          </div>
+        </div>
+        <div class="ring-stats">
+          <div><span class="n" id="statDone">0</span><span class="t"> / <span id="statTotal">0</span> tasks</span></div>
+          <div class="done-line" id="statLine">Let's begin — commit to GitHub from day one.</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="toolbar-inner">
+      <label class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="search" type="search" aria-label="Search tasks, papers, and resources" placeholder="Search tasks, papers, resources…" autocomplete="off" />
+      </label>
+      <div class="chips" id="chips"></div>
+      <div class="btns">
+        <button class="btn theme-toggle" id="themeToggle" title="Toggle theme"><span id="themeIcon">🌙</span><span class="label">Theme</span></button>
+        <button class="btn" id="expandAll" title="Expand / collapse all">⇕<span class="label"> All</span></button>
+        <button class="btn" id="exportBtn" title="Export progress as JSON">⬇<span class="label"> Export</span></button>
+        <button class="btn" id="importBtn" title="Import progress JSON">⬆<span class="label"> Import</span></button>
+        <button class="btn" id="resetBtn" title="Reset all progress">↺<span class="label"> Reset</span></button>
+        <input type="file" id="importFile" accept="application/json" hidden />
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="celebrate" id="celebrate">🎉 Every box checked. You've built the full stack from scratch — now go get those warm introductions.</div>
+    <div id="sections"></div>
+    <div class="empty hidden" id="empty">No tasks match your search or filter.</div>
+  </main>
+
+  <footer>
+    <p><strong>How to use this.</strong> Tick tasks as you complete them — progress is stored locally in your browser (no account, nothing sent anywhere). Use <em>Export</em> to back up or move progress to another device. Phases overlap by design (math runs alongside coding; paper-reading runs throughout).</p>
+    <p>Distilled from “The Complete 2026 Roadmap to Becoming a Frontier-Lab Generative AI Engineer.” Primary anchors — <a href="https://karpathy.ai/zero-to-hero.html">Karpathy’s Zero to Hero</a>, <a href="https://stanford-cs336.github.io/">Stanford CS336</a>, arXiv papers, and the labs’ own careers pages — are the most reliable; treat salary/headcount specifics as directional. The field moves fast: verify resource availability before planning around it.</p>
+    <p>Note: Karpathy’s <strong>LLM101n</strong> (the planned Eureka Labs “Storyteller” course in Python/C/CUDA) is not yet fully released as of early 2026 — <strong>nanochat</strong> is the interim capstone in its place.</p>
+  </footer>
+
+  <script>
+  /* ============================================================
+     DATA — the roadmap as a checklist.
+     cat drives filter color; tag renders a small badge.
+     ============================================================ */
+  const CATS = {
+    math:      { label: "Math",        color: "var(--cat-math)" },
+    code:      { label: "Coding",      color: "var(--cat-code)" },
+    llm:       { label: "LLMs",        color: "var(--cat-llm)" },
+    diffusion: { label: "Diffusion",   color: "var(--cat-diffusion)" },
+    systems:   { label: "Systems",     color: "var(--cat-systems)" },
+    project:   { label: "Projects",    color: "var(--cat-project)" },
+    paper:     { label: "Papers",      color: "var(--cat-paper)" },
+    career:    { label: "Career",      color: "var(--cat-career)" },
+    research:  { label: "Research",    color: "var(--cat-research)" },
+  };
+
+  const DATA = [
+    {
+      icon: "🧭", title: "Phase 1 — Foundations", sub: "Months 1–4 · math, PyTorch, neural-net internals",
+      groups: [
+        { label: "Mathematical foundations", items: [
+          { t: "Watch 3Blue1Brown — Essence of Linear Algebra (all 16 episodes) for geometric intuition", cat: "math", links: [["Playlist","https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab"]] },
+          { t: "Watch 3Blue1Brown — Essence of Calculus (chain rule = backprop)", cat: "math", links: [["Playlist","https://www.youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr"]] },
+          { t: "Work through MIT 18.06 Linear Algebra (Strang) selectively — SVD, eigen-decomposition, rank", cat: "math", links: [["MIT OCW","https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/"]] },
+          { t: "Drill multivariable calculus — partials, gradients, Jacobians, Hessians, Taylor expansions", cat: "math", links: [["Khan Academy","https://www.khanacademy.org/math/multivariable-calculus"]] },
+          { t: "Probability & statistics — distributions (esp. Gaussian), expectation/variance/covariance, Bayes, MLE", cat: "math", links: [["Harvard Stat 110","https://projects.iq.harvard.edu/stat110/home"],["StatQuest","https://www.youtube.com/@statquest"]] },
+          { t: "Nail information theory: entropy, cross-entropy (the LLM loss), KL divergence, mutual information", cat: "math" },
+          { t: "Optimization — gradient descent, SGD, momentum, Adam/AdamW, learning-rate schedules, convexity basics, and newer optimizers (Muon, used in nanochat); best learned in situ while training", cat: "math" },
+          { t: "Interview-prep math drills — SGD vs Newton-Raphson derivations, Taylor expansions, dot products / cosine similarity, covariance", cat: "math", tag: "Interview" },
+          { t: "Optionally audit the Mathematics for ML specialization (Imperial College London)", cat: "math", tag: "Optional", links: [["Coursera","https://www.coursera.org/specializations/mathematics-machine-learning"]] },
+          { t: "Keep Mathematics for Machine Learning (Deisenroth) as a free reference", cat: "math", tag: "Reference", links: [["Free PDF","https://mml-book.github.io/"]] },
+        ]},
+        { label: "Programming & PyTorch fluency", items: [
+          { t: "Reach NumPy fluency — vectorization, broadcasting, einops, profiling, clean modular code, tests, Git", cat: "code", links: [["einops","https://einops.rocks/"]] },
+          { t: "Learn PyTorch thoroughly — autograd, nn.Module, custom training loops, torch.compile", cat: "code", links: [["Tutorials","https://pytorch.org/tutorials/"]] },
+          { t: "Create a public GitHub and commit from day one", cat: "code", tag: "Habit" },
+        ]},
+        { label: "Karpathy — Neural Networks: Zero to Hero (code along, don't just watch)", items: [
+          { t: "Course home + repo", cat: "code", links: [["Zero to Hero","https://karpathy.ai/zero-to-hero.html"],["Repo","https://github.com/karpathy/nn-zero-to-hero"]] },
+          { t: "Build micrograd — autograd + backprop from scratch in pure Python", cat: "code", tag: "Project" },
+          { t: "Build makemore — MLP, BatchNorm, and manual backprop", cat: "code", tag: "Project" },
+          { t: "Build a WaveNet-style CNN character model", cat: "code", tag: "Project" },
+          { t: "Build a GPT — the \"Let's build GPT\" lecture", cat: "code", tag: "Project" },
+        ]},
+        { label: "Breadth on-ramps (in parallel)", items: [
+          { t: "Andrew Ng — Machine Learning Specialization", cat: "code", tag: "Optional", links: [["Coursera","https://www.coursera.org/specializations/machine-learning-introduction"]] },
+          { t: "Andrew Ng — Deep Learning Specialization (nets, CNNs, sequence models, structuring ML projects)", cat: "code", tag: "Optional", links: [["Coursera","https://www.coursera.org/specializations/deep-learning"]] },
+          { t: "fast.ai — Practical Deep Learning for Coders (code-first, top-down)", cat: "code", tag: "Optional", links: [["course.fast.ai","https://course.fast.ai/"]] },
+        ]},
+        { label: "Milestone", items: [
+          { t: "Milestone: micrograd + makemore + a small CNN on CIFAR-10 — all published on GitHub", cat: "project", tag: "Milestone" },
+          { t: "Self-check (around month 4): can you implement backprop and a transformer block from memory? If not, slow down and redo fundamentals before diffusion/systems.", cat: "career", tag: "Checkpoint" },
+        ]},
+      ]
+    },
+    {
+      icon: "🔤", title: "Phase 2 — Transformers & LLMs from scratch", sub: "Months 4–9 · attention, tokenization, pretraining, post-training",
+      groups: [
+        { label: "Understand the architecture", items: [
+          { t: "Self-attention & multi-head attention; positional encodings (learned, sinusoidal, RoPE); the full GPT decoder block", cat: "llm" },
+          { t: "Tokenization (BPE), pretraining objectives, KV-caching for inference, and scaling laws (Chinchilla)", cat: "llm" },
+        ]},
+        { label: "Build it", items: [
+          { t: "\"Let's build GPT\" → train nanoGPT to reproduce GPT-2 (124M)", cat: "llm", tag: "Project", links: [["nanoGPT","https://github.com/karpathy/nanoGPT"]] },
+          { t: "Study & fork nanochat — the ~8k-line full-stack ChatGPT clone (tokenizer → pretrain → SFT → RL → web UI), trained with the Muon optimizer. Best capstone repo.", cat: "llm", tag: "Project", links: [["nanochat","https://github.com/karpathy/nanochat"]] },
+          { t: "Build a BPE tokenizer from scratch", cat: "llm", tag: "Project" },
+          { t: "Budget for GPU compute — a nanochat speedrun is ~$15–100 (8×H100 at ~$5–7/hr on Modal/Lambda/RunPod, cheaper on spot), up to ~$1,000 for a stronger model. Almost everything else on this list is free.", cat: "systems", tag: "Note" },
+        ]},
+        { label: "Stanford CS336 — Language Modeling from Scratch", items: [
+          { t: "Course site + public assignments (lectures on YouTube)", cat: "llm", links: [["CS336","https://stanford-cs336.github.io/"]] },
+          { t: "Assignment 1 — tokenizer + Transformer + optimizer; train a small LM", cat: "llm", tag: "Project" },
+          { t: "Assignment 2 — profiling + FlashAttention-2 in Triton + distributed training", cat: "systems", tag: "Project" },
+          { t: "Assignment 3 — fit scaling laws", cat: "llm", tag: "Project" },
+          { t: "Assignments 4–5 — data curation from Common Crawl; SFT + RL (optional DPO/safety)", cat: "llm", tag: "Optional" },
+        ]},
+        { label: "Post-training practice", items: [
+          { t: "Implement SFT → DPO → GRPO on a small open model (and know KTO); write up the differences", cat: "llm", tag: "Project" },
+        ]},
+        { label: "Milestone", items: [
+          { t: "Milestone: your own working GPT + a fine-tuning write-up published", cat: "project", tag: "Milestone" },
+          { t: "Sequence discipline: don't jump to fine-tuning APIs before building micrograd + a from-scratch transformer — finish nanoGPT and CS336 Assignment 1 first.", cat: "career", tag: "Checkpoint" },
+          { t: "Self-check: once you can reproduce GPT-2 and a DDPM unaided, shift emphasis to original reproductions + OSS PRs.", cat: "career", tag: "Checkpoint" },
+        ]},
+      ]
+    },
+    {
+      icon: "🌫️", title: "Phase 3 — Diffusion & Systems", sub: "Months 8–14 (overlapping) · generative vision + GPU/distributed",
+      groups: [
+        { label: "Diffusion models — understand", items: [
+          { t: "Forward noising & reverse denoising; DDPM objective (predict the noise ε); noise schedules", cat: "diffusion" },
+          { t: "U-Net denoiser with attention + sinusoidal timestep embeddings; DDIM sampling; classifier-free guidance", cat: "diffusion" },
+          { t: "Latent diffusion (Stable Diffusion) and score-based / SDE formulations", cat: "diffusion" },
+        ]},
+        { label: "Diffusion — build", items: [
+          { t: "Build a DDPM from scratch (U-Net) on MNIST / CIFAR / flowers", cat: "diffusion", tag: "Project", links: [["TDS guide","https://towardsdatascience.com/diffusion-model-from-scratch-in-pytorch-ddpm-9d9760528946/"],["LearnOpenCV","https://learnopencv.com/denoising-diffusion-probabilistic-models/"]] },
+          { t: "Add DDIM sampling + classifier-free guidance", cat: "diffusion", tag: "Project" },
+          { t: "Build a small Diffusion Transformer (DiT) — U-Net replaced by a Transformer on latent patches", cat: "diffusion", tag: "Project", links: [["Official DiT","https://github.com/facebookresearch/DiT"]] },
+          { t: "Build a flow-matching / rectified-flow model (the SD3 & FLUX paradigm)", cat: "diffusion", tag: "Project", links: [["Flow Matching Guide + Code","https://arxiv.org/abs/2412.06264"]] },
+          { t: "Build a VAE on MNIST/CelebA — reparameterization trick + ELBO (underpins latent diffusion)", cat: "diffusion", tag: "Project" },
+          { t: "Implement a DCGAN once for understanding; learn the FID metric — don't over-invest", cat: "diffusion", tag: "Optional" },
+          { t: "Explore Hugging Face Diffusers for the applied layer — after building one by hand", cat: "diffusion", links: [["Diffusers","https://huggingface.co/docs/diffusers"]] },
+        ]},
+        { label: "GPU & systems", items: [
+          { t: "Read Programming Massively Parallel Processors (Kirk & Hwu, \"PMPP\") — memory hierarchy", cat: "systems", tag: "Book" },
+          { t: "Join GPU MODE (Discord + lectures + kernel leaderboard); work PMPP problem sets", cat: "systems", links: [["GPU MODE","https://github.com/gpu-mode"]] },
+          { t: "Write a Triton kernel (e.g. a fused-attention variant), benchmark it, submit to a leaderboard", cat: "systems", tag: "Project", links: [["Triton","https://triton-lang.org/"]] },
+          { t: "Learn distributed training: DDP, FSDP/ZeRO, tensor / pipeline / context parallelism, and [TP,CP,PP,DP] topology mapping", cat: "systems", links: [["PyTorch FSDP","https://pytorch.org/docs/stable/fsdp.html"],["ZeRO paper","https://arxiv.org/abs/1910.02054"]] },
+          { t: "Do a multi-GPU FSDP training run (CS336 lectures 7–8 cover parallelism)", cat: "systems", tag: "Project" },
+          { t: "Learn the ML-SWE stack: experiment tracking (Weights & Biases), reproducibility, config management, data pipelines, mixed precision (FP16/BF16/FP8), checkpointing, eval harnesses", cat: "systems", links: [["W&B","https://wandb.ai/"]] },
+        ]},
+        { label: "Milestone", items: [
+          { t: "Milestone: a from-scratch diffusion model + a custom kernel + a distributed training run", cat: "project", tag: "Milestone" },
+        ]},
+      ]
+    },
+    {
+      icon: "🚀", title: "Phase 4 — Original Work, Reputation & Applications", sub: "Months 12–24 · reproductions, OSS, network, residencies",
+      groups: [
+        { label: "Flagship work", items: [
+          { t: "Fork & meaningfully extend nanochat — document a novel tweak (data/optimizer/architecture) and its measured effect", cat: "research", tag: "Flagship" },
+          { t: "Reproduce a recent frontier paper from scratch with clear ablations, and blog the result (DiT / flow-matching / GRPO run / small MoE)", cat: "research", tag: "Flagship" },
+          { t: "Contribute PRs to a major OSS repo — PyTorch, Hugging Face transformers/diffusers, vLLM, or a Mamba/MoE implementation", cat: "research", tag: "Reputation" },
+          { t: "Compete — Kaggle, GPU MODE leaderboards, or AI-Mathematical-Olympiad-type challenges", cat: "research" },
+          { t: "Optional: turn a genuinely new result into a short paper / arXiv preprint / workshop submission", cat: "research", tag: "Optional" },
+        ]},
+        { label: "Career on-ramps & residencies", items: [
+          { t: "OpenAI Residency — 6-month program bridging strong technical people into AI research (replaced the older Scholars Program)", cat: "career", links: [["OpenAI","https://openai.com/residency/"]] },
+          { t: "Meta AI (FAIR) Residency · Google AI Residency · Apple AIML Residency", cat: "career" },
+          { t: "Anthropic Fellows / AI Safety Fellowship", cat: "career", links: [["Anthropic","https://www.anthropic.com/fellows-program"]] },
+          { t: "ARENA — 4–5 week London accelerator (free curriculum): transformers from scratch, interpretability, RL/RLHF; alumni go to Apollo Research, METR, UK AISI", cat: "career", links: [["arena.education","https://www.arena.education/"]] },
+          { t: "MATS — mentored alignment research", cat: "career", links: [["MATS","https://www.matsprogram.org/"]] },
+          { t: "Browse the awesome-ai-residency list for more programs", cat: "career", links: [["GitHub","https://github.com/dangkhoasdc/awesome-ai-residency"]] },
+        ]},
+        { label: "Get hired", items: [
+          { t: "Prep for how labs screen: write real code live (JAX may appear at DeepMind), derive ML fundamentals on the spot, and engage substantively with alignment at safety labs — don't treat safety rounds as a formality", cat: "career", tag: "Interview" },
+          { t: "Build your network and secure warm introductions — they outweigh cold applications", cat: "career", tag: "Key" },
+          { t: "Host demos on Hugging Face Spaces; maintain a living GitHub + blog", cat: "career", links: [["HF Spaces","https://huggingface.co/spaces"]] },
+          { t: "Apply to residencies/roles — expect a fast (4–6 week) process and sub-1% acceptance; it's a numbers+network game", cat: "career" },
+          { t: "No interview traction? The fix is almost always more visible public work + warm intros — not more applications.", cat: "career", tag: "Checkpoint" },
+          { t: "Decide Research Scientist vs Research Engineer early (RS: publications/PhD/residency-to-research; RE: systems + from-scratch portfolio, no PhD needed)", cat: "career", tag: "Checkpoint" },
+          { t: "After breadth, specialize: pretraining/scaling, post-training/RLHF, diffusion/video, kernels/systems, or interpretability/safety", cat: "career", tag: "Checkpoint" },
+        ]},
+        { label: "Milestone", items: [
+          { t: "Milestone: 2–3 flagship portfolio projects + public writing + an active application pipeline", cat: "project", tag: "Milestone" },
+        ]},
+      ]
+    },
+    {
+      icon: "🛠️", title: "Portfolio Projects — build & publish each", sub: "The proof you can build from scratch (clean code + a written explanation)",
+      groups: [
+        { label: "Beginner (months 1–5)", items: [
+          { t: "1. micrograd — reimplement autograd/backprop from scratch", cat: "project" },
+          { t: "2. makemore — MLP character-level language model", cat: "project" },
+          { t: "3. CNN on CIFAR-10 from scratch; reproduce a small ResNet", cat: "project" },
+          { t: "4. VAE on MNIST/CelebA (reparameterization + ELBO)", cat: "project" },
+        ]},
+        { label: "Intermediate (months 5–12)", items: [
+          { t: "5. Transformer from scratch → train nanoGPT to reproduce GPT-2 (124M)", cat: "project" },
+          { t: "6. BPE tokenizer from scratch", cat: "project" },
+          { t: "7. DDPM from scratch (U-Net) on MNIST/CIFAR/flowers + DDIM + classifier-free guidance", cat: "project" },
+          { t: "8. CS336 assignments 1–3 (Transformer + FlashAttention-2 in Triton + scaling-law fit)", cat: "project" },
+          { t: "9. Fine-tuning suite: SFT → DPO on a small open model + write-up", cat: "project" },
+        ]},
+        { label: "Advanced (months 12–24) — the pieces that impress hiring managers", items: [
+          { t: "10. Fork & extend nanochat — end-to-end ChatGPT clone with a documented, measured improvement", cat: "project", tag: "Flagship" },
+          { t: "11. Reproduce a recent paper from scratch with ablations and blog it", cat: "project", tag: "Flagship" },
+          { t: "12. Custom CUDA/Triton kernel (e.g. fused attention) + benchmark + GPU MODE leaderboard submission", cat: "project", tag: "Flagship" },
+          { t: "13. Multi-GPU distributed (FSDP) training run with a scaling analysis", cat: "project", tag: "Flagship" },
+          { t: "14. Optional: a genuinely new result / efficiency win → short paper / arXiv / workshop", cat: "project", tag: "Optional" },
+        ]},
+      ]
+    },
+    {
+      icon: "📄", title: "Core Papers to Read", sub: "Reproduce key results, don't just skim — use the 3-pass method",
+      groups: [
+        { label: "Transformers & LLMs", items: [
+          { t: "Attention Is All You Need (Vaswani et al., 2017)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/1706.03762"]] },
+          { t: "GPT-1 — Improving Language Understanding by Generative Pre-Training (Radford et al., 2018)", cat: "paper", links: [["PDF","https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf"]] },
+          { t: "GPT-2 — Language Models are Unsupervised Multitask Learners (Radford et al., 2019)", cat: "paper", links: [["PDF","https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf"]] },
+          { t: "GPT-3 — Language Models are Few-Shot Learners (Brown et al., 2020)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2005.14165"]] },
+          { t: "InstructGPT / RLHF (Ouyang et al., 2022)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2203.02155"]] },
+          { t: "Chinchilla scaling laws (Hoffmann et al., 2022)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2203.15556"]] },
+          { t: "LLaMA 1–3 — the open-weights lineage (Touvron et al., 2023; The Llama 3 Herd of Models, 2024)", cat: "paper", links: [["LLaMA 1","https://arxiv.org/abs/2302.13971"],["Llama 2","https://arxiv.org/abs/2307.09288"],["Llama 3","https://arxiv.org/abs/2407.21783"]] },
+        ]},
+        { label: "Diffusion & vision", items: [
+          { t: "Deep Unsupervised Learning w/ Nonequilibrium Thermodynamics (Sohl-Dickstein et al., 2015)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/1503.03585"]] },
+          { t: "DDPM — Denoising Diffusion Probabilistic Models (Ho, Jain, Abbeel, 2020)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2006.11239"]] },
+          { t: "Score-Based Generative Modeling through SDEs (Song et al., 2021)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2011.13456"]] },
+          { t: "Latent Diffusion / Stable Diffusion (Rombach et al., 2022)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2112.10752"]] },
+          { t: "EDM — Elucidating the Design Space of Diffusion Models (Karras et al., 2022)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2206.00364"]] },
+          { t: "DiT — Scalable Diffusion Models with Transformers (Peebles & Xie, 2022)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2212.09748"]] },
+          { t: "Vision Transformer (Dosovitskiy et al., 2020)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2010.11929"]] },
+          { t: "CLIP — Learning Transferable Visual Models (Radford et al., 2021)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2103.00020"]] },
+        ]},
+        { label: "Foundational building blocks", items: [
+          { t: "VAE — Auto-Encoding Variational Bayes (Kingma & Welling, 2013)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/1312.6114"]] },
+          { t: "GAN — Generative Adversarial Networks (Goodfellow et al., 2014)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/1406.2661"]] },
+          { t: "ResNet — Deep Residual Learning (He et al., 2015)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/1512.03385"]] },
+          { t: "Adam optimizer (Kingma & Ba, 2014)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/1412.6980"]] },
+          { t: "Batch Normalization (Ioffe & Szegedy, 2015)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/1502.03167"]] },
+        ]},
+        { label: "Post-training & modern architectures (2023–2026 frontier)", items: [
+          { t: "DPO — Direct Preference Optimization (Rafailov et al., 2023)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2305.18290"]] },
+          { t: "GRPO / DeepSeekMath (Shao et al., 2024)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2402.03300"]] },
+          { t: "DeepSeek-V3 — 671B total / 37B active MoE, FP8 training (2024)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2412.19437"]] },
+          { t: "Mixtral of Experts (Jiang et al., 2024)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2401.04088"]] },
+          { t: "Outrageously Large Neural Networks — the MoE origin (Shazeer et al., 2017)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/1701.06538"]] },
+          { t: "Flow Matching for Generative Modeling (Lipman et al., 2022)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2210.02747"]] },
+          { t: "Rectified Flow — Flow Straight and Fast (Liu et al., 2022)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2209.03003"]] },
+          { t: "Stable Diffusion 3 / MM-DiT — Scaling Rectified Flow Transformers (Esser et al., 2024)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2403.03206"]] },
+          { t: "Mamba — Linear-Time Sequence Modeling with Selective State Spaces (Gu & Dao, 2023)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2312.00752"]] },
+          { t: "Jamba — a hybrid Mamba + attention + MoE model (AI21, 2024)", cat: "paper", links: [["arXiv","https://arxiv.org/abs/2403.19887"]] },
+        ]},
+        { label: "Curated modern list", items: [
+          { t: "Work the Latent Space \"2025 AI Engineering Reading List\" (~50 papers by area)", cat: "paper", links: [["Latent Space","https://www.latent.space/p/2025-papers"]] },
+        ]},
+      ]
+    },
+    {
+      icon: "📚", title: "Textbooks, Courses & Framework Reference", sub: "Free, world-class — bookmark and work through as needed",
+      groups: [
+        { label: "Textbooks (current best)", items: [
+          { t: "Simon Prince — Understanding Deep Learning (free PDF; covers through diffusion, PyTorch notebooks)", cat: "code", tag: "Free", links: [["udlbook","https://udlbook.github.io/udlbook/"]] },
+          { t: "Bishop & Bishop — Deep Learning: Foundations and Concepts (2024; strong probabilistic grounding)", cat: "code", tag: "Book", links: [["bishopbook","https://www.bishopbook.com/"]] },
+          { t: "Dive into Deep Learning (d2l.ai) — free, interactive, PyTorch/JAX/TF", cat: "code", tag: "Free", links: [["d2l.ai","https://d2l.ai/"]] },
+        ]},
+        { label: "University courses (free online)", items: [
+          { t: "Stanford CS231n — CNNs / computer vision", cat: "code", links: [["cs231n","https://cs231n.github.io/"]] },
+          { t: "Stanford CS224n — NLP with deep learning", cat: "code", links: [["cs224n","https://web.stanford.edu/class/cs224n/"]] },
+          { t: "MIT 6.S191 — Intro to Deep Learning (fast annual refresh)", cat: "code", links: [["introtodeeplearning","https://introtodeeplearning.com/"]] },
+        ]},
+        { label: "Frameworks", items: [
+          { t: "PyTorch first (the 2026 default for new generative work)", cat: "code", links: [["pytorch.org","https://pytorch.org/"]] },
+          { t: "JAX second — jit/grad/vmap/pmap, XLA, TPUs; DeepMind's favored stack (+ Flax/Haiku)", cat: "code", links: [["JAX","https://jax.readthedocs.io/"]] },
+          { t: "TensorFlow — only for legacy/edge; Keras 3 now bridges all three backends", cat: "code", tag: "Awareness" },
+        ]},
+      ]
+    },
+    {
+      icon: "🌐", title: "Communities, Competitions & Staying Current", sub: "Engage from day one — the highest-signal reputation builder is open source",
+      groups: [
+        { label: "Communities & competitions", items: [
+          { t: "GPU MODE — the hub for CUDA/Triton kernel work + sponsored competitions and the Project Popcorn kernel-generation effort", cat: "systems", links: [["gpu-mode","https://github.com/gpu-mode"]] },
+          { t: "Kaggle — largest competition platform; Google-owned and used as a recruiting funnel (from-scratch projects still impress more for gen-AI roles)", cat: "code", links: [["Kaggle","https://www.kaggle.com/"]] },
+          { t: "Hugging Face — models, datasets, Spaces, courses; contribute to transformers / diffusers", cat: "code", links: [["huggingface.co","https://huggingface.co/"]] },
+          { t: "ARENA & MATS — structured paths into research (esp. safety/interpretability)", cat: "career", links: [["ARENA","https://www.arena.education/"]] },
+          { t: "Land PRs in PyTorch, Hugging Face, vLLM, nanoGPT/nanochat forks, or model implementations", cat: "research", tag: "Reputation" },
+        ]},
+        { label: "Reading papers & staying current", items: [
+          { t: "Learn the 3-pass paper-reading method (skim → structure/figures → reproduce the math/logic)", cat: "paper" },
+          { t: "Follow arXiv (cs.LG, cs.CL, cs.CV) + arxiv-sanity", cat: "paper", links: [["arXiv","https://arxiv.org/"]] },
+          { t: "Hugging Face Daily Papers", cat: "paper", links: [["HF Papers","https://huggingface.co/papers"]] },
+          { t: "Newsletters — Latent Space, Import AI; lab blogs — OpenAI, Anthropic, DeepMind, Meta AI", cat: "paper" },
+          { t: "Follow conference proceedings — NeurIPS, ICML, ICLR, CVPR; join a paper reading group", cat: "paper" },
+          { t: "ML Twitter/X, LessWrong / Alignment Forum, r/MachineLearning", cat: "paper" },
+        ]},
+      ]
+    },
+  ];
+
+  /* ============================================================
+     App logic
+     ============================================================ */
+  const STORE_KEY = "genai-roadmap-v1";
+  const THEME_KEY = "genai-roadmap-theme";
+  const OPEN_KEY  = "genai-roadmap-open";
+
+  // stable id from item text (order-independent) — djb2
+  function hash(str) {
+    let h = 5381;
+    for (let i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) | 0;
+    return "i" + (h >>> 0).toString(36);
+  }
+
+  let state = load();
+  function load() { try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch { return {}; } }
+  function save() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+
+  const $ = (s, el = document) => el.querySelector(s);
+  const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+
+  // ---- Build category filter chips ----
+  const chipsEl = $("#chips");
+  let activeCat = null;
+  Object.entries(CATS).forEach(([key, c]) => {
+    const chip = el("button", "chip");
+    chip.type = "button";
+    chip.dataset.cat = key;
+    chip.setAttribute("aria-pressed", "false");
+    const dot = el("span", "dot"); dot.style.background = c.color; chip.appendChild(dot);
+    chip.appendChild(document.createTextNode(c.label));
+    chip.addEventListener("click", () => {
+      const wasActive = activeCat === key;
+      chipsEl.querySelectorAll(".chip").forEach(x => {
+        x.classList.remove("active"); x.style.background = ""; x.setAttribute("aria-pressed", "false");
+      });
+      if (wasActive) {
+        activeCat = null;
+      } else {
+        activeCat = key; chip.classList.add("active"); chip.style.background = c.color; chip.setAttribute("aria-pressed", "true");
+      }
+      applyFilter();
+    });
+    chipsEl.appendChild(chip);
+  });
+
+  // ---- Render sections ----
+  const sectionsEl = $("#sections");
+  const allItems = [];
+  const openState = (() => { try { return JSON.parse(localStorage.getItem(OPEN_KEY)) || {}; } catch { return {}; } })();
+  let preFilterOpen = null;      // remembers open/closed state before a filter force-expands sections
+  let suppressToggleSave = false; // don't persist programmatic open/close changes made by the filter
+
+  DATA.forEach((sec, si) => {
+    const details = el("details", "section");
+    details.dataset.si = si;
+    const openPref = openState[si];
+    details.open = openPref === undefined ? si < 4 : openPref; // phases open by default
+    details.addEventListener("toggle", () => { if (suppressToggleSave) return; openState[si] = details.open; localStorage.setItem(OPEN_KEY, JSON.stringify(openState)); });
+
+    const head = el("summary", "section-head");
+    const icon = el("div", "sec-icon", sec.icon);
+    const titleWrap = el("div", "sec-title-wrap");
+    titleWrap.appendChild(el("div", "sec-title", sec.title));
+    if (sec.sub) titleWrap.appendChild(el("div", "sec-sub", sec.sub));
+    const prog = el("div", "sec-progress");
+    const count = el("div", "sec-count"); count.dataset.role = "count";
+    const bar = el("div", "mini-bar"); const barFill = el("span"); bar.appendChild(barFill);
+    const chev = el("div", "chevron");
+    chev.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>';
+    prog.append(count, bar, chev);
+    head.append(icon, titleWrap, prog);
+    details.appendChild(head);
+
+    const body = el("div", "section-body");
+    sec.groups.forEach(group => {
+      const groupEl = el("div", "group");
+      if (group.label) groupEl.appendChild(el("div", "group-label", group.label));
+      group.items.forEach(item => {
+        const id = hash(item.t);
+        const row = el("label", "item");
+        row.dataset.id = id;
+        row.dataset.cat = item.cat || "";
+        row.dataset.text = (item.t + " " + (item.links || []).map(l => l[0]).join(" ")).toLowerCase();
+
+        const cb = el("input", "cbox"); cb.type = "checkbox"; cb.checked = !!state[id];
+        if (cb.checked) row.classList.add("done");
+        cb.addEventListener("change", () => {
+          state[id] = cb.checked;
+          row.classList.toggle("done", cb.checked);
+          if (!cb.checked) delete state[id];
+          save(); refreshProgress();
+        });
+
+        const bodyEl = el("div", "item-body");
+        const textEl = el("div", "item-text");
+        textEl.textContent = item.t;
+        if (item.tag) {
+          const tg = el("span", "tag", item.tag);
+          if (item.cat && CATS[item.cat]) tg.style.setProperty("--tagc", CATS[item.cat].color);
+          textEl.appendChild(tg);
+        }
+        bodyEl.appendChild(textEl);
+        if (item.links && item.links.length) {
+          const linksEl = el("div", "links");
+          item.links.forEach(([label, url]) => {
+            const a = el("a", null, label); a.href = url; a.target = "_blank"; a.rel = "noopener";
+            a.addEventListener("click", e => e.stopPropagation());
+            linksEl.appendChild(a);
+          });
+          bodyEl.appendChild(linksEl);
+        }
+        row.append(cb, bodyEl);
+        groupEl.appendChild(row);
+        allItems.push({ id, row, si });
+      });
+      body.appendChild(groupEl);
+    });
+    details.appendChild(body);
+    sectionsEl.appendChild(details);
+  });
+
+  // ---- Progress ----
+  const CIRC = 2 * Math.PI * 48;
+  function refreshProgress() {
+    const total = allItems.length;
+    const done = allItems.filter(x => state[x.id]).length;
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    $("#ringPct").textContent = pct + "%";
+    $("#statDone").textContent = done;
+    $("#statTotal").textContent = total;
+    $("#ringProgress").style.strokeDashoffset = CIRC * (1 - done / total);
+
+    const line = $("#statLine");
+    if (pct === 0) line.textContent = "Let's begin — commit to GitHub from day one.";
+    else if (pct < 25) line.textContent = "Foundations underway. Keep coding along.";
+    else if (pct < 50) line.textContent = "Real momentum — you're building the internals.";
+    else if (pct < 75) line.textContent = "Over halfway. Time to reproduce frontier work.";
+    else if (pct < 100) line.textContent = "Home stretch — reputation & applications now.";
+    else line.textContent = "Complete. Go get those warm introductions. 🚀";
+    $("#celebrate").classList.toggle("show", pct === 100 && total > 0);
+
+    // per-section
+    DATA.forEach((_, si) => {
+      const secItems = allItems.filter(x => x.si === si);
+      const secDone = secItems.filter(x => state[x.id]).length;
+      const det = sectionsEl.querySelector(`.section[data-si="${si}"]`);
+      det.querySelector('[data-role="count"]').textContent = `${secDone}/${secItems.length}`;
+      det.querySelector(".mini-bar > span").style.width = (secItems.length ? (secDone / secItems.length) * 100 : 0) + "%";
+    });
+  }
+
+  // ---- Filter / search ----
+  const searchEl = $("#search");
+  function applyFilter() {
+    const q = searchEl.value.trim().toLowerCase();
+    const filtering = !!(q || activeCat);
+    // Snapshot open/closed state the first time a filter starts expanding sections.
+    if (filtering && preFilterOpen === null) {
+      preFilterOpen = {};
+      sectionsEl.querySelectorAll(".section").forEach(d => { preFilterOpen[d.dataset.si] = d.open; });
+    }
+    suppressToggleSave = true;
+    let anyVisible = false;
+    DATA.forEach((_, si) => {
+      const det = sectionsEl.querySelector(`.section[data-si="${si}"]`);
+      let secVisible = 0;
+      det.querySelectorAll(".group").forEach(g => {
+        let groupVisible = 0;
+        g.querySelectorAll(".item").forEach(row => {
+          const matchCat = !activeCat || row.dataset.cat === activeCat;
+          const matchText = !q || row.dataset.text.includes(q);
+          const show = matchCat && matchText;
+          row.classList.toggle("hidden", !show);
+          if (show) groupVisible++;
+        });
+        g.classList.toggle("hidden", groupVisible === 0);
+        secVisible += groupVisible;
+      });
+      det.classList.toggle("hidden", secVisible === 0);
+      if (secVisible > 0) { anyVisible = true; if (filtering) det.open = true; }
+    });
+    // Filter cleared: restore whatever was open/closed before filtering began.
+    if (!filtering && preFilterOpen) {
+      DATA.forEach((_, si) => {
+        const det = sectionsEl.querySelector(`.section[data-si="${si}"]`);
+        det.open = !!preFilterOpen[si];
+      });
+      preFilterOpen = null;
+    }
+    suppressToggleSave = false;
+    $("#empty").classList.toggle("hidden", anyVisible);
+  }
+  searchEl.addEventListener("input", applyFilter);
+
+  // ---- Theme ----
+  const root = document.documentElement;
+  function setTheme(t) {
+    root.setAttribute("data-theme", t);
+    localStorage.setItem(THEME_KEY, t);
+    $("#themeIcon").textContent = t === "dark" ? "🌙" : "☀️";
+  }
+  (function initTheme() {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved) { setTheme(saved); return; }
+    const prefersLight = typeof window.matchMedia === "function" && window.matchMedia("(prefers-color-scheme: light)").matches;
+    setTheme(prefersLight ? "light" : "dark");
+  })();
+  $("#themeToggle").addEventListener("click", () => setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark"));
+
+  // ---- Toolbar buttons ----
+  $("#expandAll").addEventListener("click", () => {
+    const anyClosed = [...sectionsEl.querySelectorAll(".section")].some(d => !d.open);
+    sectionsEl.querySelectorAll(".section").forEach(d => { d.open = anyClosed; });
+  });
+  $("#resetBtn").addEventListener("click", () => {
+    if (!confirm("Reset all progress? This clears every checkmark on this device.")) return;
+    state = {}; save();
+    allItems.forEach(x => { x.row.querySelector(".cbox").checked = false; x.row.classList.remove("done"); });
+    refreshProgress();
+  });
+  $("#exportBtn").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const a = el("a"); a.href = URL.createObjectURL(blob);
+    a.download = "genai-roadmap-progress.json"; a.click();
+    URL.revokeObjectURL(a.href);
+  });
+  $("#importBtn").addEventListener("click", () => $("#importFile").click());
+  $("#importFile").addEventListener("change", e => {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        if (typeof data !== "object" || data === null || Array.isArray(data)) throw new Error("bad");
+        // Keep only keys that map to real task ids; coerce everything to a clean boolean map.
+        const valid = new Set(allItems.map(x => x.id));
+        const clean = {};
+        for (const [k, v] of Object.entries(data)) if (valid.has(k) && v) clean[k] = true;
+        state = clean; save();
+        allItems.forEach(x => { const on = !!state[x.id]; x.row.querySelector(".cbox").checked = on; x.row.classList.toggle("done", on); });
+        refreshProgress();
+      } catch { alert("Could not read that file — expected a progress JSON exported from this page."); }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  });
+
+  refreshProgress();
+  </script>
+</body>
+</html>
