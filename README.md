@@ -4,6 +4,23 @@ An interactive, self-tracking checklist for the 12–24 month path to becoming a
 **frontier-lab generative AI engineer** — math → PyTorch → transformers/LLMs →
 diffusion → GPU systems → original reproductions → career on-ramps.
 
+## Architecture / How it Works
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant C as Client
+    participant S as Server
+    participant DB as Database
+    U->>C: trigger action
+    C->>S: send request
+    S->>DB: query / mutate
+    DB-->>S: result
+    S-->>C: response
+    C-->>U: update UI
+```
+
+
 - ✅ **4 phases**, **14 portfolio projects**, **~30 core papers**, plus resources & career checkpoints
 - 💾 Progress is saved in your browser (localStorage) — no account, nothing sent anywhere
 - 🔎 Search + filter by category (Math, Coding, LLMs, Diffusion, Systems, Projects, Papers, Career)
